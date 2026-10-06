@@ -1,0 +1,478 @@
+/* Geist and Geist Mono, self-hosted: the same Google Fonts files (subsets and weights)
+   the design was built with. The design uses these family names in inline styles. */
+/* cyrillic-ext */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/Geist-cyrillic-ext.woff2") format("woff2");
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/Geist-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/Geist-vietnamese.woff2") format("woff2");
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/Geist-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/Geist-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/Geist-cyrillic-ext.woff2") format("woff2");
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/Geist-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/Geist-vietnamese.woff2") format("woff2");
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/Geist-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/Geist-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./fonts/Geist-cyrillic-ext.woff2") format("woff2");
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./fonts/Geist-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./fonts/Geist-vietnamese.woff2") format("woff2");
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./fonts/Geist-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Geist";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("./fonts/Geist-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/GeistMono-cyrillic-ext.woff2") format("woff2");
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/GeistMono-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* symbols2 */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/GeistMono-symbols2.woff2") format("woff2");
+  unicode-range: U+2000-2001, U+2004-2008, U+200A, U+23B8-23BD, U+2500-259F;
+}
+/* vietnamese */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/GeistMono-vietnamese.woff2") format("woff2");
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/GeistMono-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/GeistMono-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/GeistMono-cyrillic-ext.woff2") format("woff2");
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/GeistMono-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* symbols2 */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/GeistMono-symbols2.woff2") format("woff2");
+  unicode-range: U+2000-2001, U+2004-2008, U+200A, U+23B8-23BD, U+2500-259F;
+}
+/* vietnamese */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/GeistMono-vietnamese.woff2") format("woff2");
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/GeistMono-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Geist Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/GeistMono-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Base styles shared by every page of the design. */
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+body {
+  font-family: "Geist", system-ui, sans-serif;
+  color: #202733;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+.dc-root {
+  height: 100%;
+}
+a {
+  color: #202733;
+}
+a:hover {
+  color: #ff6b00;
+}
+::selection {
+  background: #ffe2c7;
+}
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+:focus-visible {
+  outline: 2px solid #ff6b00;
+  outline-offset: 3px;
+}
+input::placeholder,
+textarea::placeholder {
+  color: #98a2b3;
+}
+
+/* ---- Mobile header (the design only specifies the desktop header) ---- */
+.mobile-menu-btn,
+.mobile-menu-panel {
+  display: none;
+}
+@media (max-width: 960px) {
+  .site-nav,
+  .site-mega {
+    display: none !important;
+  }
+  .site-header-bar {
+    padding: 0 16px !important;
+    height: 64px !important;
+    gap: 12px !important;
+  }
+  .site-header-bar > a:first-child img {
+    height: 38px !important;
+  }
+  .site-header-cta {
+    margin-left: auto;
+    height: 40px !important;
+    padding: 0 16px !important;
+    font-size: 14px !important;
+    white-space: nowrap;
+  }
+  .mobile-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #e7eaf0;
+    border-radius: 10px;
+    background: #fff;
+    color: #202733;
+    cursor: pointer;
+  }
+  .mobile-menu-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 12px 16px 28px;
+    background: #fff;
+    border-top: 1px solid #e7eaf0;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity 250ms, transform 350ms cubic-bezier(0.22, 1, 0.36, 1), visibility 0s 350ms;
+  }
+  .mobile-menu-panel.is-open {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    visibility: visible;
+    transition: opacity 250ms, transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .mobile-menu-panel nav {
+    display: flex;
+    flex-direction: column;
+  }
+  .mobile-menu-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 16px 0;
+    border: 0;
+    border-bottom: 1px solid #e7eaf0;
+    background: none;
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .mobile-menu-sub {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .mobile-menu-sub.is-open {
+    grid-template-rows: 1fr;
+  }
+  .mobile-menu-sub > div {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .mobile-menu-sub a {
+    padding: 12px 0 12px 14px;
+    border-left: 2px solid #ffe2c7;
+    color: #475467;
+    font-size: 16px;
+    text-decoration: none;
+  }
+  .mobile-menu-sub a:first-child {
+    margin-top: 8px;
+  }
+  .mobile-menu-sub a:last-child {
+    margin-bottom: 8px;
+  }
+  .mobile-menu-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 52px;
+    border-radius: 12px;
+    background: #ff6b00;
+    color: #202733 !important;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+  }
+}
+@media (max-width: 380px) {
+  .site-header-cta {
+    display: none !important;
+  }
+}
+
+/* ---- Phone fixes for the design's desktop-first layouts ---- */
+/* Decorative shapes (hero marks, glows) bleed past the edge by design; clip them so
+   the page never scrolls sideways. `clip` (unlike `hidden`) keeps position: sticky working. */
+.dc-root {
+  overflow-x: clip;
+}
+@media (max-width: 760px) {
+  /* Items spanning two columns of an auto-fit grid would force a second, off-screen
+     column once the grid collapses to one column. */
+  .dc-root [style*="grid-column:span 2"],
+  .dc-root [style*="grid-column: span 2"] {
+    grid-column: 1 / -1 !important;
+  }
+}
+/* Footer: five columns in one row on desktop (as designed); reflow on smaller screens. */
+@media (max-width: 960px) {
+  .site-footer-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 36px 28px !important;
+  }
+  .site-footer-grid > :first-child {
+    grid-column: 1 / -1;
+  }
+  /* The contact column's icons hang 44px to its left; keep them on screen. */
+  .site-footer-grid > :last-child {
+    padding-left: 44px;
+  }
+}
+@media (max-width: 560px) {
+  .site-footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .site-footer-grid > :last-child {
+    grid-column: 1 / -1;
+  }
+}
+/* About page */
+@media (max-width: 560px) {
+  .about-hero-line {
+    white-space: normal !important;
+  }
+  .founder-card {
+    aspect-ratio: auto !important;
+  }
+  .about-steps {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+/* Industries: on phones the open tile of the industry strip needs room for its text;
+   the strip already scrolls sideways. */
+@media (max-width: 560px) {
+  .ind-tile {
+    min-width: 72px !important;
+  }
+  .ind-tile.is-active {
+    min-width: 250px !important;
+  }
+}
