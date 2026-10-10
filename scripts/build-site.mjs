@@ -58,6 +58,31 @@ fs.mkdirSync(path.join(OUT, ASSET_DIR), { recursive: true });
 const written = new Map(); // hash -> public path
 let failed = false;
 
+// Optimised replacements: scripts/media/<original-hash>.<ext> replaces that asset
+// (e.g. a lighter brand video), and scripts/media/<original-hash>-first.jpg is its first frame.
+const MEDIA = path.join(here, "media");
+const writeAsset = (bytes, ext) => {
+  const hash = crypto.createHash("sha256").update(bytes).digest("hex").slice(0, 16);
+  const name = `${hash}.${ext}`;
+  if (!written.has(hash)) { fs.writeFileSync(path.join(OUT, ASSET_DIR, name), bytes); written.set(hash, `/${ASSET_DIR}/${name}`); }
+  return written.get(hash);
+};
+const LOGO_URL = fs.existsSync(path.join(here, "loader-logo.png")) ? writeAsset(fs.readFileSync(path.join(here, "loader-logo.png")), "png") : null;
+
+// Instant cover: painted with the very first bytes of the page, before any script runs, so
+// there's never a blank white screen. Homepage (first visit): the brand video's first frame,
+// so the animation continues seamlessly from it. Elsewhere: the logo. It fades out once the
+// video is actually playing, or once the page has rendered.
+const coverHtml = (first) => `<div id="emb-cover" aria-hidden="true">${first ? `<img data-first src="${first}" alt="">` : ""}${LOGO_URL ? `<img data-logo src="${LOGO_URL}" alt="">` : ""}</div>
+<script>(function(){var c=document.getElementById('emb-cover');if(!c)return;var seen=false;try{seen=!!sessionStorage.getItem('emb_splash')}catch(e){}
+var f=c.querySelector('[data-first]');var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(f&&!seen&&!rm)c.className='first';else c.className='logo';
+var done=false,t0=Date.now();function hide(){if(done)return;done=true;c.style.opacity='0';setTimeout(function(){c.parentNode&&c.parentNode.removeChild(c)},450)}
+(function poll(){if(done)return;var v=document.querySelector('[data-splashvid]'),sp=document.querySelector('[data-splash]');
+if(sp&&v){if(!v.paused&&v.currentTime>0.04&&+getComputedStyle(v).opacity>0.98){c.style.transition='opacity .12s linear';return hide()}}else if(document.querySelector('header'))return hide();
+if(Date.now()-t0>9000)return hide();requestAnimationFrame(poll)})()})();</script>`;
+const COVER_CSS = `<style id="emb-cover-css">#emb-cover{position:fixed;inset:0;z-index:2147483000;background:#fff;display:flex;align-items:center;justify-content:center;padding:24px;transition:opacity .4s ease}#emb-cover img{display:none}#emb-cover.first [data-first]{display:block;width:min(720px,90vw);max-height:80vh;height:auto;object-fit:contain}#emb-cover.logo [data-logo]{display:block;width:min(300px,60vw);height:auto;animation:emb-p 1.6s ease-in-out infinite alternate}@keyframes emb-p{from{opacity:.6}to{opacity:1}}@media (prefers-reduced-motion:reduce){#emb-cover.logo [data-logo]{animation:none}}</style>`;
+
 const pages = fs.readdirSync(ROOT).filter((f) => f.endsWith(".html")).sort();
 for (const file of pages) {
   const src = fs.readFileSync(path.join(ROOT, file), "utf8");
@@ -75,20 +100,29 @@ for (const file of pages) {
   if ((JSON.parse(block(src, "page_order") || "[]")).length) console.warn("WARNING:", file, "has nested pages - not supported");
 
   const urls = {};
+  const posters = {};
   for (const [uuid, entry] of Object.entries(manifest)) {
     let bytes = Buffer.from(entry.data, "base64");
     if (entry.compressed) bytes = zlib.gunzipSync(bytes);
-    const hash = crypto.createHash("sha256").update(bytes).digest("hex").slice(0, 16);
-    const name = `${hash}.${EXT[entry.mime] || "bin"}`;
-    const pub = `/${ASSET_DIR}/${name}`;
-    if (!written.has(hash)) {
-      fs.writeFileSync(path.join(OUT, ASSET_DIR, name), bytes);
-      written.set(hash, pub);
-    }
-    urls[uuid] = pub;
+    const ext = EXT[entry.mime] || "bin";
+    const orig = crypto.createHash("sha256").update(bytes).digest("hex").slice(0, 16);
+    const better = path.join(MEDIA, `${orig}.${ext}`);
+    if (fs.existsSync(better)) bytes = fs.readFileSync(better);
+    urls[uuid] = writeAsset(bytes, ext);
+    const first = path.join(MEDIA, `${orig}-first.jpg`);
+    if (fs.existsSync(first)) posters[urls[uuid]] = writeAsset(fs.readFileSync(first), "jpg");
   }
   for (const [uuid, pub] of Object.entries(urls)) html = html.split(uuid).join(pub);
   html = html.replace(/\s+integrity="[^"]*"/gi, "").replace(/\s+crossorigin="[^"]*"/gi, "");
+
+  // Brand intro: poster frame on the video, and let the full animation (5s) play once it has
+  // started instead of the design's 4s cap from page start, which cut it before the wordmark.
+  let firstFrame = null;
+  for (const [vid, poster] of Object.entries(posters)) {
+    if (html.includes(`src="${vid}"`)) { html = html.split(`src="${vid}"`).join(`src="${vid}" poster="${poster}"`); firstFrame = poster; }
+  }
+  const capA = "if (this.state.splash) { this.setState({ splash: false }); this.startPage(); } }, 4000); }";
+  if (html.includes(capA)) html = html.replace(capA, capA.replace("}, 4000); }", "}, 7500); }"));
 
   // Forms
   // (skipped when the export was already wired by the older patch-forms.mjs)
@@ -101,8 +135,11 @@ for (const file of pages) {
   // *visible* height (dvh); browsers without dvh ignore the rule and keep the original.
   const fits = new Map();
   for (const m of html.matchAll(/<div ((?:data-[\w-]+)="")[^>]*?max-height:\s*calc\(100vh - (\d+)px\)/g)) fits.set(m[1].slice(0, -3), m[2]);
-  const fitCss = [...fits].map(([attr, px]) => `[${attr}]{max-height:calc(100dvh - ${px}px)!important}`).join("");
-  const fitStyle = fitCss ? `<style id="emburc-popup-fit">@supports (height:100dvh){${fitCss}}</style>` : "";
+  // --emb-vh is measured from the visible screen (visualViewport) and kept updated as the
+  // browser bars show/hide; 1dvh / 1vh are fallbacks.
+  const fitCss = [...fits].map(([attr, px]) => `[${attr}]{max-height:calc(var(--emb-vh,1vh)*100 - ${px}px)!important;overscroll-behavior:contain}`).join("");
+  const fitStyle = fitCss ? `<style id="emburc-popup-fit">:root{--emb-vh:1vh}@supports (height:1dvh){:root{--emb-vh:1dvh}}${fitCss}</style>` +
+    `<script>(function(){function s(){var h=window.visualViewport?visualViewport.height:window.innerHeight;if(h>0)document.documentElement.style.setProperty('--emb-vh',(h/100)+'px')}s();window.addEventListener('resize',s);window.addEventListener('orientationchange',s);if(window.visualViewport)visualViewport.addEventListener('resize',s)})();</script>` : "";
 
   // Head: resource map for the runtime (React from our own files), preloads, forms client
   const resourceMap = {};
@@ -110,11 +147,13 @@ for (const file of pages) {
   const preloads = Object.values(resourceMap).map((u) => `<link rel="preload" as="script" href="${u}">`).join("");
   const headAdd =
     `<script>window.__resources = ${JSON.stringify(resourceMap).replace(/<\//g, "<\\/")};</script>` + preloads +
-    `<script id="emburc-forms">\n${formsClient}</script>` + fitStyle;
+    `<script id="emburc-forms">\n${formsClient}</script>` + fitStyle + COVER_CSS;
   const headOpen = html.match(/<head[^>]*>/i);
   if (!headOpen) { console.error("ERROR:", file, "has no <head>"); failed = true; continue; }
   const i = headOpen.index + headOpen[0].length;
   html = html.slice(0, i) + headAdd + html.slice(i);
+  const bodyOpen = html.match(/<body[^>]*>/i);
+  if (bodyOpen) { const j = bodyOpen.index + bodyOpen[0].length; html = html.slice(0, j) + coverHtml(file === "index.html" ? firstFrame : null) + html.slice(j); }
 
   // Any uuid left over means an asset we could not resolve
   const left = html.match(/\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/g) || [];
