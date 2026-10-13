@@ -21,6 +21,7 @@ const here = path.dirname(url.fileURLToPath(import.meta.url));
 const ROOT = path.resolve(here, "..");
 const OUT = path.join(ROOT, process.argv[2] || "site");
 const ASSET_DIR = "_a";
+const SITE = "https://emburc.com"; // main address, used for canonical tags and the sitemap
 
 const EXT = {
   "image/jpeg": "jpg", "image/png": "png", "image/svg+xml": "svg", "image/webp": "webp", "image/gif": "gif",
@@ -141,12 +142,19 @@ for (const file of pages) {
   const fitStyle = fitCss ? `<style id="emburc-popup-fit">:root{--emb-vh:1vh}@supports (height:1dvh){:root{--emb-vh:1dvh}}${fitCss}</style>` +
     `<script>(function(){function s(){var h=window.visualViewport?visualViewport.height:window.innerHeight;if(h>0)document.documentElement.style.setProperty('--emb-vh',(h/100)+'px')}s();window.addEventListener('resize',s);window.addEventListener('orientationchange',s);if(window.visualViewport)visualViewport.addEventListener('resize',s)})();</script>` : "";
 
+  // SEO: one clean address per page. Point internal links at /about-us (not about-us.html,
+  // which Cloudflare redirects) and tell Google which address is the main one.
+  const slug = (f) => (f === "index.html" ? "/" : "/" + f.replace(/\.html$/, ""));
+  const names = pages.map((f) => f.replace(/\.html$/, "").replace(/[-]/g, "\\-")).join("|");
+  html = html.replace(new RegExp(`(["'(])(?:\\./|/)?(${names})\\.html(?=[#?"')])`, "g"), (_, q, n) => q + slug(n + ".html"));
+  html = html.replace(/<link[^>]+rel=["']canonical["'][^>]*>/gi, "");
+  const canonical = `<link rel="canonical" href="${SITE}${slug(file)}">`;
   // Head: resource map for the runtime (React from our own files), preloads, forms client
   const resourceMap = {};
   for (const r of ext) if (urls[r.uuid]) resourceMap[r.id] = urls[r.uuid];
   const preloads = Object.values(resourceMap).map((u) => `<link rel="preload" as="script" href="${u}">`).join("");
   const headAdd =
-    `<script>window.__resources = ${JSON.stringify(resourceMap).replace(/<\//g, "<\\/")};</script>` + preloads +
+    canonical + `<script>window.__resources = ${JSON.stringify(resourceMap).replace(/<\//g, "<\\/")};</script>` + preloads +
     `<script id="emburc-forms">\n${formsClient}</script>` + fitStyle + COVER_CSS;
   const headOpen = html.match(/<head[^>]*>/i);
   if (!headOpen) { console.error("ERROR:", file, "has no <head>"); failed = true; continue; }
@@ -167,5 +175,16 @@ for (const file of pages) {
 // Long cache for content-hashed assets; pages always revalidate.
 fs.writeFileSync(path.join(OUT, "_headers"),
   `/${ASSET_DIR}/*\n  Cache-Control: public, max-age=31536000, immutable\n\n/*.html\n  Cache-Control: public, max-age=0, must-revalidate\n`);
+// Sitemap and robots.txt so Google finds every page at its clean address.
+const today = new Date().toISOString().slice(0, 10);
+const sitemapUrls = pages.map((f) => {
+  const loc = SITE + (f === "index.html" ? "/" : "/" + f.replace(/\.html$/, ""));
+  const pri = f === "index.html" ? "1.0" : /privacy|terms/.test(f) ? "0.3" : "0.8";
+  return `  <url><loc>${loc}</loc><lastmod>${today}</lastmod><priority>${pri}</priority></url>`;
+}).join("\n");
+fs.writeFileSync(path.join(OUT, "sitemap.xml"),
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls}\n</urlset>\n`);
+fs.writeFileSync(path.join(OUT, "robots.txt"), `User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\n`);
+console.log(`sitemap.xml (${pages.length} pages) and robots.txt written`);
 console.log(`${written.size} assets written to /${ASSET_DIR}`);
 if (failed) process.exit(1);
