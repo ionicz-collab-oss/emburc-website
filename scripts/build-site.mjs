@@ -23,6 +23,32 @@ const OUT = path.join(ROOT, process.argv[2] || "site");
 const ASSET_DIR = "_a";
 const SITE = "https://emburc.com"; // main address, used for canonical tags and the sitemap
 
+// Search and social: description shown under each page in Google, and the preview card
+// used when a link is shared on LinkedIn, WhatsApp, X etc. Edit the text here.
+const DESCRIPTIONS = {
+  "index.html": "Emburc is a technology and talent partner from India: website, web and mobile app development, AI solutions and vetted engineers for growing businesses.",
+  "about-us.html": "Emburc is a founder-led technology and talent partner registered in India, helping businesses build software and grow their engineering teams.",
+  "offerings.html": "Website, web app, mobile app and custom software development, plus generative AI, AI agents, cloud migration and legacy modernisation from Emburc.",
+  "talent-solutions.html": "Hire vetted software developers and engineers through staff augmentation, dedicated teams or managed projects. Shortlist in 72 hours.",
+  "industries.html": "Software development, AI solutions and engineering talent from Emburc for companies across industries.",
+  "case-studies.html": "Websites, web apps and digital products built by the Emburc team, with the results they delivered for clients.",
+  "privacy-policy.html": "How Emburc Technologies collects, uses and protects your personal information.",
+  "terms-of-use.html": "The terms and conditions for using the Emburc Technologies website.",
+};
+const ORG = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Emburc Technologies",
+  legalName: "Emburc Technologies Private Limited",
+  url: "https://emburc.com/",
+  logo: "https://emburc.com/og-image.png",
+  email: "contact@emburc.com",
+  telephone: "+91 96538 21663",
+  address: { "@type": "PostalAddress", addressLocality: "Jamshedpur", addressRegion: "Jharkhand", addressCountry: "IN" },
+  sameAs: ["https://www.linkedin.com/company/emburctechnologies/"],
+};
+const esc = (t) => String(t).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+
 const EXT = {
   "image/jpeg": "jpg", "image/png": "png", "image/svg+xml": "svg", "image/webp": "webp", "image/gif": "gif",
   "video/mp4": "mp4", "video/webm": "webm", "font/woff2": "woff2", "font/woff": "woff",
@@ -148,7 +174,23 @@ for (const file of pages) {
   const names = pages.map((f) => f.replace(/\.html$/, "").replace(/[-]/g, "\\-")).join("|");
   html = html.replace(new RegExp(`(["'(])(?:\\./|/)?(${names})\\.html(?=[#?"')])`, "g"), (_, q, n) => q + slug(n + ".html"));
   html = html.replace(/<link[^>]+rel=["']canonical["'][^>]*>/gi, "");
-  const canonical = `<link rel="canonical" href="${SITE}${slug(file)}">`;
+  const pageUrl = SITE + slug(file);
+  const title = ((html.match(/<title>([^<]*)<\/title>/i) || [])[1] || "Emburc").trim().replace(/&amp;/g, "&");
+  const desc = DESCRIPTIONS[file] || "";
+  if (!desc) console.warn("WARNING:", file, "has no description in DESCRIPTIONS");
+  html = html.replace(/<meta[^>]+name=["']description["'][^>]*>/gi, "");
+  html = html.replace(/<html(?![^>]*\blang=)([^>]*)>/i, '<html lang="en"$1>');
+  const jsonLd = [ORG, ...(file === "index.html" ? [{ "@context": "https://schema.org", "@type": "WebSite", name: "Emburc", url: SITE + "/" }] : [])];
+  const canonical = `<link rel="canonical" href="${pageUrl}">` +
+    (desc ? `<meta name="description" content="${esc(desc)}">` : "") +
+    `<meta property="og:type" content="website"><meta property="og:site_name" content="Emburc">` +
+    `<meta property="og:title" content="${esc(title)}"><meta property="og:url" content="${pageUrl}">` +
+    (desc ? `<meta property="og:description" content="${esc(desc)}">` : "") +
+    `<meta property="og:image" content="${SITE}/og-image.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">` +
+    `<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}">` +
+    (desc ? `<meta name="twitter:description" content="${esc(desc)}">` : "") +
+    `<meta name="twitter:image" content="${SITE}/og-image.png">` +
+    `<script type="application/ld+json">${JSON.stringify(jsonLd.length === 1 ? jsonLd[0] : jsonLd).replace(/</g, "\\u003c")}</script>`;
   // Head: resource map for the runtime (React from our own files), preloads, forms client
   const resourceMap = {};
   for (const r of ext) if (urls[r.uuid]) resourceMap[r.id] = urls[r.uuid];
@@ -186,5 +228,14 @@ fs.writeFileSync(path.join(OUT, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapUrls}\n</urlset>\n`);
 fs.writeFileSync(path.join(OUT, "robots.txt"), `User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\n`);
 console.log(`sitemap.xml (${pages.length} pages) and robots.txt written`);
+
+// Share image, and a real "page not found" page. Without 404.html Cloudflare answers every
+// unknown address (old links, typos) with the homepage, which Google counts as duplicates.
+const og = path.join(here, "og-image.png");
+if (fs.existsSync(og)) fs.copyFileSync(og, path.join(OUT, "og-image.png"));
+else console.warn("WARNING: scripts/og-image.png missing - link previews will have no image");
+fs.writeFileSync(path.join(OUT, "404.html"), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Page not found | Emburc</title>
+<style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:Geist,system-ui,-apple-system,Segoe UI,sans-serif;background:#fff;color:#202733;text-align:center;padding:24px}h1{font-weight:500;font-size:40px;letter-spacing:-.03em;margin:0 0 12px}p{color:#667085;font-size:17px;margin:0 0 28px}a{display:inline-block;background:#FA7B20;color:#fff;text-decoration:none;padding:12px 22px;border-radius:999px;font-weight:500}</style></head>
+<body><main><p style="font:500 12px/1 monospace;letter-spacing:.14em;color:#98A2B3;margin-bottom:16px">404</p><h1>This page doesn't exist.</h1><p>It may have moved, or the link may be old.</p><a href="/">Go to the homepage</a></main></body></html>`);
 console.log(`${written.size} assets written to /${ASSET_DIR}`);
 if (failed) process.exit(1);
